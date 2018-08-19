@@ -21,7 +21,7 @@ class UsersController extends Controller
 {
     public function index()
     {
-        $users = User::paginate(2);
+        $users = User::paginate(20);
         
         return view('users.index', [
             'users' => $users,
@@ -34,7 +34,7 @@ class UsersController extends Controller
         
         if( isset($user) ) {
             
-            $messages = $user->messages_withimage()->orderBy('created_at', 'desc')->paginate(5);
+            $messages = $user->messages_withimage()->orderBy('created_at', 'desc')->paginate(20);
             $data = [
                 'user' => $user,
                 'messages' => $messages,
@@ -84,7 +84,7 @@ class UsersController extends Controller
         
         if( isset($user) ) {
             
-            $messages = $user->messages_withimage()->orderBy('created_at', 'desc')->paginate(5);
+            $messages = $user->messages_withimage()->orderBy('created_at', 'desc')->paginate(20);
             $pickups = $user->pickup_messages()->orderBy('grid_no', 'asc')->paginate(9);
 
             $data = [
@@ -109,7 +109,7 @@ class UsersController extends Controller
         $user = User::find($id);
         
         if( isset($user) ) {
-            $followings = $user->followings()->paginate(2);
+            $followings = $user->followings()->paginate(20);
             
             $data = [
                 'user' => $user,
@@ -129,7 +129,7 @@ class UsersController extends Controller
 
         $user = User::find($id);
         if( isset($user) ) {
-            $followers = $user->followers()->paginate(2);
+            $followers = $user->followers()->paginate(20);
             
             $data =[
                 'user' => $user,
@@ -150,7 +150,7 @@ class UsersController extends Controller
         
         if( isset($user) ) {
             
-            $messages = $user->favorites()->orderBy('created_at', 'desc')->paginate(2);
+            $messages = $user->favorites()->orderBy('created_at', 'desc')->paginate(20);
             $data = [
                 'user' => $user,
                 'messages' => $messages,
@@ -196,18 +196,18 @@ class UsersController extends Controller
                         'mimes:jpeg,jpg,png,gif',
                         // 最小縦横120px 最大縦横400px
                         'dimensions:min_width=120,min_height=120,max_width=400,max_height=400',
-                        // 文字数最大191
-                        'max:191',
+                        // 容量最大200
+                        'max:200',
                     ]
                 ]);
                 
                 //return $request->file;
+                $oldfile = $user->image_path;
+                $filename = $request->file;
                 
-                if ($request->file !== null) {
-                    $oldfile = $user->image_path;
-                    $filename = basename($request->file->store('public/avatar/' . $user->id));
+                if ($filename === null) {
                 } else {
-                    $filename = $user->image_path;
+                    $filename = basename($request->file->store('public/avatar/' . $id));
                 }
                 
                 $request->user()->update([
@@ -216,10 +216,9 @@ class UsersController extends Controller
                     'profile' => $request->profile,
                     'image_path' => $filename
                 ]);
-                if ($request->file !== null) {
-                    if (isset($oldfile)) {
-                        Storage::delete('public/avatar/' . $user->id . '/' . $oldfile);
-                    }
+                if ($oldfile === null) {
+                } else {
+                    Storage::delete('public/avatar/' . $id . '/' . $oldfile);
                 }
                 
                 return redirect('/')->with('message', $request->page . config('const.msg_0002'));
@@ -245,5 +244,31 @@ class UsersController extends Controller
         }
         
     }
+    
+    public function cancel()
+    {
+
+        if (\Auth::check()) {
+            $user = \Auth::user();
+            
+            if( isset($user) ) {
+                
+                $user->followings()->detach();
+                $user->followers()->detach();
+                $user->pickups()->delete();
+                $user->messages()->delete();
+                $user->delete();
+                
+                Storage::deleteDirectory('public/avatar/' . $user->id);
+                return redirect('/')->with('message', 'アカウント' . config('const.msg_0002'));
+            } else {
+                return redirect('/')->with('message', config('const.errmsg_0001'));
+            }
+        } else {
+            return redirect('/')->with('message', config('const.errmsg_0001'));
+        }
+        
+    }
+    
     
 }

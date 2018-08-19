@@ -20,7 +20,7 @@
                             本当に削除してもよろしいですね？<br><br>
                         </p>
                         <div class="form-group">
-                            {!! Form::model(Auth::user(), ['route' => ['users.update', Auth::id()], 'method' => 'put']) !!}
+                            {!! Form::model(Auth::user(), ['route' => ['mymenu.cancel'], 'method' => 'post']) !!}
                                 {!! Form::submit('アカウント削除（ボタンを押すと同時にアカウントを削除し、ログアウトします。）', ['class' => 'btn btn-danger btn-block']) !!}
                             {!! Form::close() !!}
                         </div>

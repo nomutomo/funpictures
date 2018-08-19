@@ -24,12 +24,13 @@
         @if ($counter == $message->grid_no)
             <div class="col-xs-4">
                 <div class="media-left">
-                    <img class="media-object img-rounded" src="{{ asset('storage/avatar/' . $user->id . '/' . $user->image_path) }}" height="25px" alt="">
+                    @include('commons.avatar', ['size' => 25, 'user'=>$user])
                 </div>
                 <div class="media-body">
                     <p>{!! link_to_route('users.show', $user->name, ['id' => $user->id]) !!} <span class="text-muted"> - {{ $message->created_at }}</span></p>
+                    
                     @if (isset($message->image_path))
-                        <p><img class="media-object img-rounded img-responsive" src="{{ asset('storage/avatar/' . $user->id . '/' . $message->image_path) }}" alt="avater"></p>
+                        <p><img class="media-object img-rounded" src="{{ asset('storage/avatar/' . $user->id . '/' . $message->image_path) }}" height="200px" alt="avater"/></p>
                     @endif
                     <P>{!! nl2br(e($message->content)) !!}</p>
                 </div>

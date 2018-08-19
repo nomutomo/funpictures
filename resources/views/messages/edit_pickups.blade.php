@@ -18,7 +18,8 @@
                 <ul id="sortable3" class="media-list droptrue col-xs-3">
                     <li class="media">
                         <div class="media-left">
-                            {!! $counter !!}<img class="media-object img-rounded" src="{{ asset('storage/avatar/' . $user->id . '/' . $user->image_path) }}" height="25px" alt="">
+                            {!! $counter !!}
+                            @include('commons.avatar', ['size' => 25, 'user'=>$user])
                         </div>
                         <div class="media-body">
                             <div>

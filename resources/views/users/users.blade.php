@@ -4,7 +4,7 @@
         @foreach ($users as $user)
             <li class="media">
                 <div class="media-left">
-                    <img class="media-object img-rounded" src="{{ asset('storage/avatar/' . $user->id . '/' . $user->image_path) }}" width="100px" alt="">
+                    @include('commons.avatar', ['size' => 100, 'user' => $user])
                     @include('user_follow.follow_button', ['user' => $user])
                 </div>
                 <div class="media-body">

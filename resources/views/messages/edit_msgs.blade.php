@@ -3,7 +3,7 @@
         <?php $user = $message->user; ?>
         <li class="media">
             <div class="media-left">
-                <img class="media-object img-rounded" src="http://23441cd9965b41c18eade1246bcc714b.vfs.cloud9.us-east-1.amazonaws.com/storage/avatar/1/P6Sq6EjWYtT6Ulk2br9VmyBRJmU3MT2Cr2lPxUVS.jpeg" height="25px" alt="">
+                 @include('commons.avatar', ['size' => 25, 'user'=>$user])
             </div>
             <div class="media-body">
                 <div>

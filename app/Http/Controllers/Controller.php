@@ -24,4 +24,19 @@ class Controller extends BaseController
             'count_followers' => $count_followers,
         ];
     }
+    
+    public function uploadfile($id,$newfile) {
+        $filename = '';
+        if (isset($newfile)) {
+            $filename = basename($newfile->store('public/avatar/' . $id));
+        }
+        return $filename;
+    }
+    
+    public function deletefile($id,$oldfile) {
+        if (isset($oldfile)) {
+            Storage::delete('public/avatar/' . $id . '/' . $oldfile);
+        }
+    }
+    
 }

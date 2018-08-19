@@ -8,7 +8,10 @@
                     <h3 class="panel-title">{{ $user->name }}</h3>
                 </div>
                 <div class="panel-body">
-                    <img class="media-object img-rounded img-responsive" src="{{ asset('storage/avatar/' . $user->id . '/' . $user->image_path) }}" width="500px" alt="">
+                    @include('commons.avatar', ['size' => 500, 'user'=>$user])
+                </div>
+                <div class="panel-body">
+                    {{ $user->profile }}
                 </div>
             </div>
             @include('user_follow.follow_button', ['user' => $user])

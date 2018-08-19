@@ -21,7 +21,7 @@ Route::get('signup', 'Auth\RegisterController@showRegistrationForm')->name('sign
 Route::post('signup', 'Auth\RegisterController@register')->name('signup.post');
 
 Route::group(['middleware' => 'auth'], function () {
-    Route::resource('users', 'UsersController', ['only' => ['index', 'show', 'followings', 'followers', 'update', 'edit']]);
+    Route::resource('users', 'UsersController', ['only' => ['index', 'show', 'followings', 'followers', 'update', 'edit', 'cancel']]);
     Route::group(['prefix' => 'users/{id}'], function () {
         Route::post('follow', 'UserFollowController@store')->name('user.follow');
         Route::delete('unfollow', 'UserFollowController@destroy')->name('user.unfollow');
@@ -30,11 +30,14 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('followers', 'UsersController@followers')->name('users.followers');
     });
 
-    Route::resource('messages', 'MessagesController', ['only' => ['index', 'store', 'destroy']]);
+    Route::resource('messages', 'MessagesController', ['only' => ['index', 'store', 'destroy' , 'put']]);
+    Route::resource('images', 'ImagesController', ['only' => ['store', 'destroy']]);
     Route::get('profile', 'MymenuController@profile')->name('mymenu.profile');
     Route::get('account', 'MymenuController@account')->name('mymenu.account');
     Route::get('password', 'MymenuController@password')->name('mymenu.password');
     Route::get('edit', 'UsersController@edit')->name('mymenu.edit');
+    Route::post('put', 'MessagesController@put')->name('messages.put');
+    Route::post('cancel', 'UsersController@cancel')->name('mymenu.cancel');
     
 });
 
